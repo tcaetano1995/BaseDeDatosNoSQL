@@ -1,1 +1,21 @@
-docker run --name my-cassandra-db -v ./data:/var/lib/cassandra/data -d cassandra:latest
+docker run --name my-cassandra-db -v ./data:/var/lib/cassandra/data -p 9042:9042 -p 7000:7000 -d cassandra:latest
+
+
+docker exec -it  my-cassandra-db cqlsh
+
+
+
+CREATE KEYSPACE obligatorio WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
+
+
+
+INSERT INTO messages_by_foro (foro_id, date, message_id, topic_id, topic_name, user_name, texto, links, hashtags)
+VALUES ('uuid', 'date', 'timeuuid', 'int', 'text', 'text', 'text', list<text>, list<text>);
+
+
+INSERT INTO messages_by_topic (topic_id, date, message_id, foro_id, foro_name, user_name, texto, links, hashtags)
+VALUES ('uuid', 'date', 'timeuuid', 'int', 'text', 'text', 'text', list<text>, list<text>);
+
+INSERT INTO messages_by_id (message_id, date, topic_id, foro_id, user_name, texto, links, hashtags)
+VALUES ('timeuuid', 'date', 'int', 'int', 'text', 'text', list<text>, list<text>);
+

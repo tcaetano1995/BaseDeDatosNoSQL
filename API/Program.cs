@@ -1,3 +1,6 @@
+using API.Controllers;
+using Cassandra;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +10,26 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
+// Cassandra configuration
+var cassandraCluster = Cluster.Builder()
+    .AddContactPoints("localhost") // Change to your Cassandra contact points
+    .WithDefaultKeyspace("obligatorio") // Change to your Cassandra keyspace
+    .Build();
+var session = cassandraCluster.Connect();
+
+
+// Register Cassandra session in dependency injection container
+builder.Services.AddSingleton(session);
+
+// Add ForoLogic to dependency injection container
+builder.Services.AddScoped<ForoLogic>();
+
 var app = builder.Build();
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
