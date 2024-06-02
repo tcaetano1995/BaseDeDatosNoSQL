@@ -1,0 +1,8 @@
+# .NET
+*.obj
+*.pdb
+*.user
+*.vs
+bin/
+obj/
+.vs/
