@@ -4,8 +4,27 @@ docker run --name my-cassandra-db -v ./data:/var/lib/cassandra/data -p 9042:9042
 docker exec -it  my-cassandra-db cqlsh
 
 
-
 CREATE KEYSPACE obligatorio WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
+
+USE obligatorio;
+
+
+-- crear las tablas como tiene en el documento pdf
+
+-- Insertar los datos generados por el script python
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -18,4 +37,5 @@ VALUES ('uuid', 'date', 'timeuuid', 'int', 'text', 'text', 'text', list<text>, l
 
 INSERT INTO messages_by_id (message_id, date, topic_id, foro_id, user_name, texto, links, hashtags)
 VALUES ('timeuuid', 'date', 'int', 'int', 'text', 'text', list<text>, list<text>);
+
 
