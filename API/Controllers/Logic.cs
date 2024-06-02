@@ -1,4 +1,5 @@
 ﻿using Cassandra;
+using System.Collections.Generic;
 using ISession = Cassandra.ISession;
 
 namespace API.Controllers
@@ -18,15 +19,9 @@ namespace API.Controllers
             try
             {
 
-                var startDate = DateTime.UtcNow.AddHours(-last);
-                startDate = startDate.Date;
-                var finishDate = DateTime.UtcNow.Date;
-
-                var startTimestamp = DateTimeOffset.UtcNow.AddHours(-last).ToUnixTimeMilliseconds();
-
-                var query = $"SELECT * FROM messages_by_foro WHERE foro_id = ? AND date >= ? AND date <= ? AND message_id >= ?";
+                var query = $"SELECT * FROM messages_by_topic WHERE foro_id = ? LIMIT ?";
                 var preparedStatement = _session.Prepare(query);
-                var boundStatement = preparedStatement.Bind(foroid, startDate, finishDate, startTimestamp);
+                var boundStatement = preparedStatement.Bind(foroid, last);
                 var result = _session.Execute(boundStatement);
 
                 return MapMessagesByForo(result);
@@ -43,13 +38,13 @@ namespace API.Controllers
             try
             {
 
-                var startDate = DateTime.UtcNow.AddHours(-last);
+                var startDate = DateTime.UtcNow.AddDays(-last);
                 startDate = startDate.Date;
                 var finishDate = DateTime.UtcNow.Date;
 
-                var startTimestamp = DateTimeOffset.UtcNow.AddHours(-last).ToUnixTimeMilliseconds();
+                var startTimestamp = DateTimeOffset.UtcNow.AddDays(-last).ToUnixTimeMilliseconds();
 
-                var query = $"SELECT * FROM messages_by_topic WHERE topic_id = ? AND date >= ? AND date <= ? AND message_id >= ?";                
+                var query = $"SELECT * FROM messages_by_topic WHERE topic_id = ? AND date >= ? AND date <= ? AND message_id >= ?  allow filtering";                
                 
                 var preparedStatement = _session.Prepare(query);
                 var boundStatement = preparedStatement.Bind(topicid, startDate, finishDate, startTimestamp);

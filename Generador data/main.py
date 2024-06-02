@@ -23,8 +23,8 @@ def replace_quotes(file_path):
 
 def generate_random_date():
     year = random.randint(2023, 2023)
-    month = random.randint(10, 12)
-    day = random.randint(1, 28)  # Assuming all months have 28 days for simplicity
+    month = random.randint(12, 12)
+    day = random.randint(20, 31)  # Assuming all months have 28 days for simplicity
     hour = random.randint(0, 23)
     minute = random.randint(0, 59)
     second = random.randint(0, 59)
