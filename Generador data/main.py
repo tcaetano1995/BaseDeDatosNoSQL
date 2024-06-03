@@ -219,7 +219,7 @@ with open('inserts.sql', 'w') as f:
         timestamp_unix = int(time.mktime(timestamp.timetuple()))
 
         date = timestamp.strftime("%Y-%m-%d")
-        message_id = UUID(int=timestamp_unix, version=1)  # Generate UUID v1 with the timestamp
+        message_id = uuid.uuid1()  # Generate UUID v1 with the timestamp
         
         topic = random.choice(topics)
         foro = random.choice(forums)
