@@ -1,15 +1,17 @@
 ﻿using Cassandra;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using ISession = Cassandra.ISession;
+
 
 namespace API.Controllers
 {
 
-    public class ForoLogic
+    public class Logic
     {
         private readonly ISession _session;
 
-        public ForoLogic(ISession session)
+        public Logic(ISession session)
         {
             _session = session ?? throw new ArgumentNullException(nameof(session));
         }
@@ -176,5 +178,105 @@ namespace API.Controllers
                 Hashtags = row.GetValue<List<string>>("hashtags")
             };
         }
+        public void InsertUser(Usuario usuario)
+        {
+            try
+            {
+                var query = "INSERT INTO usuarios (id_usuario, nombre, email, fecha_registro) VALUES (?, ?, ?, ?)";
+                var preparedStatement = _session.Prepare(query);
+                var boundStatement = preparedStatement.Bind(
+                    usuario.IdUsuario,
+                    usuario.Nombre,
+                    usuario.Email,
+                    usuario.FechaRegistro
+                );
+                _session.Execute(boundStatement);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception as required
+                throw; // Rethrow the exception for the caller to handle
+            }
+        }
+        public void InsertActividad(Actividad actividad)
+        {
+            try
+            {
+                var query = "INSERT INTO actividad (id_usuario, id_juego, horas_jugadas, logros, niveles_desbloqueados, fecha_ultima_sesion) VALUES (?, ?, ?, ?, ?, ?)";
+                var preparedStatement = _session.Prepare(query);
+                var boundStatement = preparedStatement.Bind(
+                    actividad.IdUsuario,
+                    actividad.IdJuego,
+                    actividad.HorasJugadas,
+                    actividad.Logros,
+                    actividad.NivelesDesbloqueados,
+                    actividad.FechaUltimaSesion
+                );
+                _session.Execute(boundStatement);
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception as required
+                throw; // Rethrow the exception for the caller to handle
+            }
+        }
+
+        public Actividad GetActividad(Guid idUsuario, Guid idJuego)
+        {
+            try
+            {
+                var query = "SELECT * FROM actividad WHERE id_usuario = ? AND id_juego = ?";
+                var preparedStatement = _session.Prepare(query);
+                var boundStatement = preparedStatement.Bind(idUsuario, idJuego);
+                var result = _session.Execute(boundStatement).FirstOrDefault();
+
+                if (result == null)
+                    return null;
+
+                return new Actividad
+                {
+                    IdUsuario = result.GetValue<Guid>("id_usuario"),
+                    IdJuego = result.GetValue<Guid>("id_juego"),
+                    HorasJugadas = result.GetValue<int>("horas_jugadas"),
+                    Logros = result.GetValue<List<string>>("logros"),
+                    NivelesDesbloqueados = result.GetValue<List<string>>("niveles_desbloqueados"),
+                    FechaUltimaSesion = result.GetValue<DateTime>("fecha_ultima_sesion")
+                };
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception as required
+                throw; // Rethrow the exception for the caller to handle
+            }
+        }
+        public List<Actividad> GetAllActividades()
+        {
+            try
+            {
+                var query = "SELECT * FROM actividad";
+                var result = _session.Execute(query);
+
+                var actividades = new List<Actividad>();
+                foreach (var row in result)
+                {
+                    actividades.Add(new Actividad
+                    {
+                        IdUsuario = row.GetValue<Guid>("id_usuario"),
+                        IdJuego = row.GetValue<Guid>("id_juego"),
+                        HorasJugadas = row.GetValue<int>("horas_jugadas"),
+                        Logros = row.GetValue<List<string>>("logros"),
+                        NivelesDesbloqueados = row.GetValue<List<string>>("niveles_desbloqueados"),
+                        FechaUltimaSesion = row.GetValue<DateTime>("fecha_ultima_sesion")
+                    });
+                }
+                return actividades;
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception as required
+                throw; // Rethrow the exception for the caller to handle
+            }
+        }
+
     }
 }

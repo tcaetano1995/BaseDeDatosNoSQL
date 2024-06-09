@@ -24,7 +24,7 @@ var session = cassandraCluster.Connect();
 builder.Services.AddSingleton(session);
 
 // Add ForoLogic to dependency injection container
-builder.Services.AddScoped<ForoLogic>();
+builder.Services.AddScoped<Logic>();
 
 var app = builder.Build();
 

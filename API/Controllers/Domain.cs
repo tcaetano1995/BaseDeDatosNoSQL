@@ -41,3 +41,31 @@ public class MessageById
     public List<string> Links { get; set; }
     public List<string> Hashtags { get; set; }
 }
+
+
+public class Juego
+{
+    public Guid IdJuego { get; set; }
+    public string Nombre { get; set; }
+    public string Genero { get; set; }
+    public string Desarrollador { get; set; }
+    public DateTime FechaLanzamiento { get; set; }
+}
+
+public class Usuario
+{
+    public Guid IdUsuario { get; set; }
+    public string Nombre { get; set; }
+    public string Email { get; set; }
+    public DateTime FechaRegistro { get; set; }
+}
+
+public class Actividad
+{
+    public Guid IdUsuario { get; set; }
+    public Guid IdJuego { get; set; }
+    public int HorasJugadas { get; set; }
+    public List<string> Logros { get; set; }
+    public List<string> NivelesDesbloqueados { get; set; }
+    public DateTime FechaUltimaSesion { get; set; }
+}

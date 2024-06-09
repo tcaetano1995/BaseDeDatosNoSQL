@@ -10,12 +10,12 @@ namespace API.Controllers
     public class ForoController : ControllerBase
     {
 
-        private readonly ForoLogic _foroLogic;
+        private readonly Logic _foroLogic;
 
 
         public ForoController(ISession session)
         {
-            _foroLogic = new ForoLogic(session);
+            _foroLogic = new Logic(session);
         }
         [HttpGet("byId")]
         public IActionResult GetMessageById([FromQuery] Guid id)

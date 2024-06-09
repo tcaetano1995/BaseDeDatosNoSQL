@@ -8,6 +8,40 @@ CREATE KEYSPACE obligatorio WITH replication = {'class': 'SimpleStrategy', 'repl
 USE obligatorio;
 
 
+CREATE TABLE IF NOT EXISTS juegos (
+    id_juego UUID PRIMARY KEY,
+    nombre TEXT,
+    genero TEXT,
+    desarrollador TEXT,
+    fecha_lanzamiento DATE
+);
+
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id_usuario UUID PRIMARY KEY,
+    nombre TEXT,
+    email TEXT,
+    fecha_registro TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS actividad (
+    id_usuario UUID,
+    id_juego UUID,
+    horas_jugadas INT,
+    logros list<TEXT>,
+    niveles_desbloqueados list<TEXT>,
+    fecha_ultima_sesion TIMESTAMP,
+    PRIMARY KEY ((id_usuario), id_juego, fecha_ultima_sesion)
+) WITH CLUSTERING ORDER BY (id_juego ASC, fecha_ultima_sesion DESC);
+
+
+//Para insertar los datos de prueba de la sección 4, los mismos los encontraremos en el documento, datosDePruebaSec4.txt
+
+
+
+
+
 CREATE TABLE messages_by_foro (
     foro_id UUID,
     date date,
