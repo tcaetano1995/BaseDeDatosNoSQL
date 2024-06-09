@@ -1,5 +1,4 @@
-docker run --name my-cassandra-db -v ./data:/var/lib/cassandra/data -p 9042:9042 -p 7000:7000 -d cassandra:latest
-
+docker run --name my-cassandra-db -v ./data:/var/lib/cassandra -p 9042:9042 -p 7000:7000 -d cassandra:latest
 
 docker exec -it  my-cassandra-db cqlsh
 
